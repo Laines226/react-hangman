@@ -14,26 +14,31 @@ import HangImage07 from '../images/hangman07.png';
 import HangImage08 from '../images/hangman08.png';
 import HangImage09 from '../images/hangman09.png';
 
-function TextToUnderScores(props) {
-    console.log("textToUnderScores props", props);
-    const text = props.text.split('');
-    const lettersArray = props.letters;
+// function TextToUnderScores(props) {
+//     console.log("textToUnderScores props", props);
+//     const text = props.text.split('');
+//     const lettersArray = props.letters;
 
-    let renderIt = (
-        <div>
-            {
-                text.map((letter, index) => {
-                    let show = '_ ';
-                    if (lettersArray.indexOf(letter) !== -1) {
-                        show = letter + ' ';
-                    }
-                    return <span key={index}>{show}</span>;
-                })
-            }
-        </div>
-    );
-    return renderIt;
-}
+//     let completedWord = true;
+
+//     let renderIt = (
+//         <div>
+//             {
+//                 text.map((letter, index) => {
+//                     let show = '_ ';
+//                     if (lettersArray.indexOf(letter) !== -1) {
+//                         show = letter + ' ';
+//                     }else{
+//                         completedWord = false;
+//                     }
+//                     return <span key={index}>{show}</span>;
+//                 })
+//             }
+//         </div>
+//     );
+//     console.log("TextToUnderScores completed", completedWord);
+//     return {toRender: renderIt, completed: completedWord}
+// }
 
 
 class Game extends Component {
@@ -42,23 +47,31 @@ class Game extends Component {
         this.state = {
             noOfFails: 0,
             lettersArray: [],
-            letter: ''
+            letter: '',
+            loose: false,
         }
         this.imageArray = [HangImageEmpty, HangImage00, HangImage01, HangImage02, HangImage03, HangImage04, HangImage05, HangImage06, HangImage07, HangImage08, HangImage09];
         this.maxLives = this.imageArray.length;
         this.onKeyPressed = this.onKeyPressed.bind(this);
     }
     onKeyPressed(event) {
-        console.log("onKeyPress", event.key);
-        this.setState({ letter: event.key });
+        let newLetter = event.key.toUpperCase();
+        let text = this.props.text.split('');
+        let lettersArray = this.state.lettersArray;
+
+        console.log("onKeyPress", newLetter);
+        this.setState({ letter: newLetter });
         var reg = new RegExp(/^[A-Za-z]$/, 'gi');
-        if (event.key.toString().match(reg) && this.state.lettersArray.indexOf(event.key) === -1) {
-            this.state.lettersArray.push(event.key);
-            this.setState(prevState => ({ noOfFails: prevState.noOfFails + 1 }));
-            if (this.state.noOfFails === this.maxLives - 2) {
-                alert("Looser!!");
+        if (newLetter.match(reg)) {
+            if (text.indexOf(newLetter) !== -1 || this.state.lettersArray >= -1 ) {
+                this.state.lettersArray.push(newLetter);
             }
-            Component.forceUpdate();
+            else{
+                this.setState(prevState => ({ noOfFails: prevState.noOfFails + 1 }));
+                if (this.state.noOfFails === this.maxLives - 2) {
+                    this.setState({loose: true});
+                }
+            }
         }
         else {
             console.log("onKeyPress not matched [key]", event.key);
@@ -66,40 +79,47 @@ class Game extends Component {
         this.setState({ letter: '' });
     }
     render() {
-        //<lettersTypedIn />
-        const lettersArray = this.state.lettersArray
-        // const text = this.props.text.split('');
+        let toRender = <div> <p> error</p> </div>;
 
-        // let textToUnderScores = (
-        //     <div>
-        //     {
-        //         text.map((letter, index)=>{
-        //             let show = '_ ';
-        //             if(lettersArray.indexOf(letter) !== -1){
-        //                 show = letter + ' ';
-        //             }
-        //             return <span key={index}>{show}</span>;
-        //         })
-        //     }
-        //     </div>
-        // );
+        let lettersArray = this.state.lettersArray
+        let text = this.props.text.split('');
 
-        let lettersTypedIn = (
-            <div>
-                {
-                    lettersArray.map((letter, index) => {
-                        return <p key={index}>{letter}</p>
+        let completedWord = true;
+        let textToUnderScores = (
+            <div> Word:
+             {
+                    text.map((letter, index) => {
+                        let show = '_ ';
+                        if (lettersArray.indexOf(letter) !== -1) {
+                            show = letter + ' ';
+                        }
+                        else{
+                            completedWord = false;
+                        }
+                        return <span key={index}>{show}</span>;
                     })
                 }
             </div>
         );
-        return (
-            <div>
+
+        if(this.state.loose){
+            toRender = <p>Verloren, das Word war {this.props.text} </p>
+        }
+        else if(completedWord){
+            toRender = <p>Gewonnen, das Word war {this.props.text} </p>
+        }
+        else{
+            toRender = (<div>
                 <input type="text" onKeyPress={this.onKeyPressed} value={this.state.letter} />
 
                 <ShowImageOfArray array={this.imageArray} index={this.state.noOfFails} />
-                <TextToUnderScores text={this.props.text} letters={this.state.lettersArray} />
-                {lettersTypedIn}
+                {textToUnderScores}
+            </div>);
+        }
+        console.log("toRender", toRender);
+        return (
+            <div>
+                {toRender}
             </div>
         );
     }
@@ -108,5 +128,17 @@ class Game extends Component {
 Game.propTypes = {
     text: React.PropTypes.string.isRequired
 }
+
+
+
+        // let lettersTypedIn = (
+        //     <div> Wrond letters:
+        //         {
+        //             lettersArray.map((letter, index) => {
+        //                 return <span key={index}>{letter}, </span>
+        //             })
+        //         }
+        //     </div>
+        // );
 
 export default Game;
