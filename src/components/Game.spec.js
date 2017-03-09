@@ -1,7 +1,16 @@
 import React from 'react';
-import { indexOfCharacterInArray, testIfUpperCaseAndLetter, stateAfterFail } from './Game'
+import { indexOfCharacterInArray, testIfUpperCaseAndLetter, stateAfterFail } from './Game';
+
+import Game from './Game';
+import { shallow } from 'enzyme';
 
 describe('teste indexOfCharacterInArray', () => {
+    /* it("should be able to access functions", () => {
+       const wrapper = shallow(<Game tex="text"/>);
+       let res = g.render();
+        expect(res).toBe(-1);
+    }); */
+
     test("indexOfCharacterInArray r in empty array", () => {
         let character = 'r';
         let array = [];
@@ -43,9 +52,9 @@ describe('teste indexOfCharacterInArray', () => {
         let array = [['f'], ['r'], ['f']];
         expect(indexOfCharacterInArray(character, array)).toBe(-1);
     });
-})
+});
 describe('teste testIfUpperCaseAndLetter', () => {
-    test("testIfUpperCaseAndLetter('s')", () => {
+    it("should handle uppercases", () => {
         let char = 's';
         expect(testIfUpperCaseAndLetter(char)).toBe(false);
     }

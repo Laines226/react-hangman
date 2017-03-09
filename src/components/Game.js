@@ -45,7 +45,7 @@ export function isKeyValid(upperCaseKey, text) {
         }
     }
     return false;
-}
+} 
 
 export function stateAfterFail(current, max) {
     current += 1;
@@ -71,6 +71,7 @@ class Game extends Component {
         this.onKeyPressed = this.onKeyPressed.bind(this);
 
     }
+
     onKeyPressed(event) {
         let newLetter = event.key.toUpperCase();
         // check Everything

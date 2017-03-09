@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import InputText from './InputText';
 import Game from './Game';
 
+/** @class Represents the hangman container.
+ * Renders an input textfield and an image with the state of the game.
+ * 
+ * !! you must pass the array of images in ORDER!!! from no hangman to full hangman.
+ * 
+ */
 class Hangman extends Component {
   constructor(props, context) {
     super(props, context);
