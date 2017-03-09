@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import ShowImageOfArray from './ShowImageOfArray.js'
 
+// Styles
+import '../styles/text.css';
+
 //Hangman-Images
 import HangImageEmpty from '../images/hangmanEmpty.png';
 import HangImage00 from '../images/hangman00.png';
@@ -13,32 +16,6 @@ import HangImage06 from '../images/hangman06.png';
 import HangImage07 from '../images/hangman07.png';
 import HangImage08 from '../images/hangman08.png';
 import HangImage09 from '../images/hangman09.png';
-
-// function TextToUnderScores(props) {
-//     console.log("textToUnderScores props", props);
-//     const text = props.text.split('');
-//     const lettersArray = props.letters;
-
-//     let completedWord = true;
-
-//     let renderIt = (
-//         <div>
-//             {
-//                 text.map((letter, index) => {
-//                     let show = '_ ';
-//                     if (lettersArray.indexOf(letter) !== -1) {
-//                         show = letter + ' ';
-//                     }else{
-//                         completedWord = false;
-//                     }
-//                     return <span key={index}>{show}</span>;
-//                 })
-//             }
-//         </div>
-//     );
-//     console.log("TextToUnderScores completed", completedWord);
-//     return {toRender: renderIt, completed: completedWord}
-// }
 
 
 class Game extends Component {
@@ -103,10 +80,10 @@ class Game extends Component {
         );
 
         if(this.state.loose){
-            toRender = <p>Verloren, das Word war {this.props.text} </p>
+            toRender = <p className="redtext">Verloren, das Word war {this.props.text} </p>
         }
         else if(completedWord){
-            toRender = <p>Gewonnen, das Word war {this.props.text} </p>
+            toRender = <p className="greentext">Gewonnen, das Word war {this.props.text} </p>
         }
         else{
             toRender = (<div>
